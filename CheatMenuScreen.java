@@ -29,28 +29,11 @@ public class CheatMenuScreen extends Screen {
         }));
         y += BUTTON_HEIGHT + PADDING;
 
-        addButton(createButton(y, "TargetESP: " + (TargetESP.isActive ? "ON" : "OFF"), button -> {
-            TargetESP.toggle();
-            button.setMessage(new StringTextComponent("TargetESP: " + (TargetESP.isActive ? "ON" : "OFF")));
-        }));
-        y += BUTTON_HEIGHT + PADDING;
-
-        addButton(createButton(y, "EntityESP: " + (EntityESP.isActive ? "ON" : "OFF"), button -> {
-            EntityESP.toggle();
-            button.setMessage(new StringTextComponent("EntityESP: " + (EntityESP.isActive ? "ON" : "OFF")));
-        }));
-        y += BUTTON_HEIGHT + PADDING;
-
         addButton(createButton(y, "Aimbot: " + (AimbotModule.isActive ? "ON" : "OFF"), button -> {
             AimbotModule.toggle();
             button.setMessage(new StringTextComponent("Aimbot: " + (AimbotModule.isActive ? "ON" : "OFF")));
         }));
         y += BUTTON_HEIGHT + PADDING;
-
-        addButton(createButton(y, "SwingAnimations: " + (SwingAnimations.isActive ? "ON" : "OFF"), button -> {
-            SwingAnimations.toggle();
-            button.setMessage(new StringTextComponent("SwingAnimations: " + (SwingAnimations.isActive ? "ON" : "OFF")));
-        }));
     }
 
     private Button createButton(int y, String title, Button.IPressable pressable) {
@@ -61,14 +44,15 @@ public class CheatMenuScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (Widget widget : this.buttons) {
-            if (widget instanceof CustomButton btn && btn.isMouseOver(mouseX, mouseY)) {
-                if (button == 1 && btn.getMessage().getString().startsWith("KillAura")) {
-                    minecraft.getInstance().setScreen(new KillAuraSettingsScreen());
-                } else if (button == 1 && btn.getMessage().getString().startsWith("SwingAnimi")) {
-                    minecraft.getInstance().setScreen(new SwingAnimationsSettingsScreen());
+            if (widget instanceof CustomButton) {
+                CustomButton btn = (CustomButton) widget;
+                if (btn.isMouseOver(mouseX, mouseY)) {
+                    if (button == 1 && btn.getMessage().getString().startsWith("KillAura")) {
+                        Minecraft.getInstance().setScreen(new KillAuraSettingsScreen());
+                    }
+                    btn.onPress();
+                    return true;
                 }
-                btn.onPress();
-                return true;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
